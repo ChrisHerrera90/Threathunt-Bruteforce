@@ -17,7 +17,6 @@ Management has reported a large increase in failed login attempts across the ent
 - Management reports an increase in failed log on attemtps in cloud identities.
 - MITRE ATT&CK Technique: T1110 (Brute Force)
   - MITRE ATT&CK sub-Technique: T1110.001 - Password Guessing
-  - MITRE ATT&CK sub-Technique: T1110.002 - Password Cracking
   - MITRE ATT&CK sub-Technique: T1110.003 - Password Spraying
   - MITRE ATT&CK sub-Technique: T1110.004 - Credential Stuffing
 
