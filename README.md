@@ -88,50 +88,51 @@ Additionally I ran the top 3 IP addresses with the highest logon attempts throug
 
 
 
-
-
-
-
-
-
-
-
 Next:
 - Find the location of these attempts
 - Find the services that were used
 - Find if any of them were successful in logging in
 - Get list of IP addresss to block and services to disable AND enable account lockout policy on EDR
 
+
+
+
 ---
 
-### 2. Searched the `DeviceProcessEvents` Table
+### 2. Searched the `SecurityEvents` Table for Successful Login Attempts from Malicious IPs
 
-Due to the sheer number of failed logon attempts in just a 7 day period, it is safe to assume that some kind of brute force attack has been in play.  
+Due to the sheer number of failed logon attempts in just a 7 day period, it is safe to assume that some kind of brute force attack has been in play. Next, we are going to determine whether any of the malicious IP addresses actually successfully logged into the `windows-target-1` during their brute force attacks. To do this, I first want to get a list of all suspicious IP's that meet this criteria using the following KQL query in Sentinel:
 
 ```kql
-DeviceProcessEvents
-| where DeviceName == "ceh-tor1"
-| where ProcessCommandLine contains "TOR shopping lists"
-| order by Timestamp desc' 
+SecurityEvent
+| where EventID == 4625
+| where TimeGenerated > ago(7d)
+| where Computer == "windows-target-1"
+| summarize FailedAttempts = count()
+    by IpAddress
+| where FailedAttempts > 10
+| order by FailedAttempts desc
 ```
-The results showed that a `TOR shopping lists.txt` file was created via notepad and stored on the VM's desktop by user `ceh2025` on `2025-04-25T17:51:09.028509Z`:
+The results show there were 311 unique IP addresses that accumulated more than 10 failed logon attempts in the last 7 days:
 
-![image](https://github.com/user-attachments/assets/ec95ecc3-da9f-46c3-95d1-6b5335a99ecf)
-![image](https://github.com/user-attachments/assets/763a1711-61b8-4a06-888f-c162bb8c57c6)
+![image](https://github.com/user-attachments/assets/91834a79-5dc7-480d-bda7-f3f701b3f364)
 
-Additionally, I also searched for any `ProcessCommandLine` that contained the string "tor-browser-windows-x86_64-portable-14.0.1.exe". Based on `DeviceFileEvent` logs, the user on the "ceh-tor1" device ran the file `tor-browser-windows-x86_64-portable-14.5.exe` from their Downloads folder, using a command that triggered a silent installation.
+Now that I have identified these IP addresses, I decided to search the Sentinel logs to see if any one of these IPs successfully logged into our endpoint using the following KQL query:
 
 **Query used to locate event:**
 
 ```kql
-DeviceProcessEvents
-| where DeviceName == "ceh-tor1"
-| where ProcessCommandLine contains "tor-browser-windows-x86_64-portable-14.5.exe"
-| project Timestamp, DeviceName, AccountName, FileName, FolderPath, SHA256, ProcessCommandLine, ActionType
+SecurityEvent
+| where EventID == 4624  // Successful logon
+| where TimeGenerated > ago(7d)
+| where Computer == "windows-target-1"
+| project TimeGenerated, IpAddress, AccountName, Computer, LogonType
+| order by TimeGenerated asc
 ```
-The results showed that on `2025-04-25T17:43:37.8933806Z` the user ceh2025 downloaded and silently installed the TOR browser onto their virtual machine:
 
-![image](https://github.com/user-attachments/assets/24b35bad-dd59-475a-88b3-91f2cb2cebed)
+The results show that there have been 1000 successful login attempts. Out of the 1000, none of the suspicious IP addresses showed to have successfully logged onto `windows-target-1`
+
+![image](https://github.com/user-attachments/assets/29a02d33-f2e9-4e20-b6ec-09a216c1206b)
 
 
 ---
