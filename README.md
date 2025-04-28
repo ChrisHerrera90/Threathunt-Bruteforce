@@ -9,6 +9,10 @@ Management has reported a large increase in failed login attempts across the ent
 ## 🤔 Threat Hunt Hypothesis
 **Hypothesis:** Adversaries are conducting brute force attacks against internet-facing Azure virtual assets in order to gain unauthorized access without triggering account lockouts.
 
+**Scope:** I will perform the threat hunt across all internet-facing cloud assets within the Azure enterprise environment utilizing Microsoft Sentinel and Microsoft Defender for Endpoint logs. I am specifically looking for activity related to multiple failed logon attempts, logins from abnormal geolocations, password guessing, password cracking, password spraying and credential stuffing.
+
+**Priority:** High — potential unauthorized access to cloud assets.
+
 **Basis:**
 - Management reports an increase in failed log on attemtps in cloud identities.
 - MITRE ATT&CK Technique: T1110 (Brute Force)
@@ -21,10 +25,6 @@ Management has reported a large increase in failed login attempts across the ent
 - A high volume of failed log on attempts (greater than 10) from a single or multiple IPs across multiple user accounts.
 - Login attempts clustered during late-night or weekend hours
 - Login attempts from IP addresses geolocated outside expected business regions.
-
-**Scope:** I will perform the threat hunt across all internet-facing cloud assets within the Azure enterprise environment utilizing Microsoft Sentinel and Microsoft Defender for Endpoint logs. I am specifically looking for activity related to multiple failed logon attempts, logins from abnormal geolocations, password guessing, password cracking, password spraying and credential stuffing.
-
-**Priority:** High — potential unauthorized access to cloud assets.
 
 
 ## ⚙️ Platforms and Languages Leveraged
