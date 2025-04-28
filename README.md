@@ -13,7 +13,8 @@
 - Microsoft Sentinel
 - Kusto Query Language (KQL)
 
-##  High-Level Overview of Steps Taken During Investigation
+##  High-Level Overview of Steps Taken During Hunt
+Add links to each section/step of hunt!!
 - **Check `DeviceFileEvents`** for any `tor(.exe)` or `firefox(.exe)` file events.
 - **Check `DeviceProcessEvents`** for any signs of installation or usage.
 - **Check `DeviceNetworkEvents`** for any signs of outgoing connections over known TOR ports.
