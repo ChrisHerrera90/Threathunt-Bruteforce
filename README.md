@@ -56,7 +56,7 @@ DeviceProcessEvents
 
 ## 🧩 Steps Taken During Hunt
 
-### 1. Searched the `SecurityEvents` Table
+### 1. Searched the `SecurityEvents` Table for Greater than 10 failed Logon Attempts
 
 I began my query by using the `SecurityEvent` to look for any failed logon attempts (greater than 10) in the last 7 days by searching for Event ID 4625 (Account failed to log on). In addition, I included for the results to list the account names, IP addresses/ports, failure reason, how many times the event occured and logon types for any returned results:
 
@@ -78,18 +78,35 @@ The results yielded 309 failed logon events on the `windows-target-1` endpoint i
 
 ![image](https://github.com/user-attachments/assets/e9cf38fa-ab07-4539-9ade-fd3f1eba0472)
 
+Additionally I ran the top 3 IP addresses with the highest logon attempts through VirusTotal, and they all came back flagged as malicious. It is also important to note that these IP addresses are registered in foreign countries such as Russia, United Arab Emirates, and Peru:
+
+![image](https://github.com/user-attachments/assets/4b7f78f2-a6ea-4792-9fb1-ab9b890db661)
+
+![image](https://github.com/user-attachments/assets/5788ec5f-00de-4833-ab8a-d57d4cfd5ac4)
+
+![image](https://github.com/user-attachments/assets/52c1c6c2-24e7-45ae-99a4-cc9fa9523220)
+
+
+
+
+
+
+
+
+
+
 
 Next:
 - Find the location of these attempts
 - Find the services that were used
-- Find if any of them were successful in loggingin
+- Find if any of them were successful in logging in
 - Get list of IP addresss to block and services to disable AND enable account lockout policy on EDR
 
 ---
 
 ### 2. Searched the `DeviceProcessEvents` Table
 
-Since there where some kind of file that was created, I used the following query to determine what type of file had been created, the specific file path it was stored in, and which user account was responsible for its creation:
+Due to the sheer number of failed logon attempts in just a 7 day period, it is safe to assume that some kind of brute force attack has been in play.  
 
 ```kql
 DeviceProcessEvents
