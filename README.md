@@ -74,12 +74,15 @@ SecurityEvent
 | order by FailedAttempts desc
 ```
 
-The results yielded 309 failed logon events in the past 7 days, with many of them having thousands of failed logon attempts:
+The results yielded 309 failed logon events on the `windows-target-1` endpoint in the past 7 days, with many of them having thousands of failed logon attempts:
 
 ![image](https://github.com/user-attachments/assets/e9cf38fa-ab07-4539-9ade-fd3f1eba0472)
 
 
-
+Next:
+- Find the location of these attempts
+- Find the services that were used
+- Find if any of them were successful in loggingin
 
 ---
 
