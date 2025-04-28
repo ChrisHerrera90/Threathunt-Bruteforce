@@ -31,28 +31,14 @@ Management has reported a large increase in failed login attempts across the ent
 - EDR Platform: Microsoft Defender for Endpoint
 - Microsoft Sentinel
 - Kusto Query Language (KQL)
+- VirusTotal
 
 ## ⛰️ High-Level Overview of Steps Taken During Hunt
-Add links to each section/step of hunt!!
-- **Check `DeviceFileEvents`** for any `tor(.exe)` or `firefox(.exe)` file events.
-- **Check `DeviceProcessEvents`** for any signs of installation or usage.
-- **Check `DeviceNetworkEvents`** for any signs of outgoing connections over known TOR ports.
+- **Check `SecurityEvents`** for Greater than 10 failed Logon Attempts
+- **Check `SecurityEvents`** for Successful Login Attempts from Malicious IPs
+- **Designed Remediation Steps for Review**
 
-```kql
-DeviceFileEvents
-| top 20 by Timestamp desc
-```
-```kql
-DeviceNetworkEvents
-| top 20 by Timestamp desc
-```
-```kql
-DeviceProcessEvents
-| top 20 by Timestamp desc
-```
 ---
-
-
 
 ## 🧩 Steps Taken During Hunt
 
@@ -152,64 +138,12 @@ There are three main remediation steps that can implement right away:
 
 3. Enable an account lockout policy for this device after 5 failed logon attempts within the Microsoft Defender for Endpoint (EDR)
 
-
----
-
-## Chronological Event Timeline 
-
-### 1. File Download - TOR Installer
-
-- **Timestamp:** `2025-04-25T17:43:37.8933806Z`
-- **Event:** The user "ceh2025" downloaded a file named `tor-browser-windows-x86_64-portable-14.5.exe` to the Downloads folder.
-- **Action:** File download detected.
-- **File Path:** `C:\Users\ceh2025\Downloads\tor-browser-windows-x86_64-portable-14.5.exe`
-
-### 2. Process Execution - TOR Browser Installation
-
-- **Timestamp:** `2025-04-25T17:43:37.8933806Z`
-- **Event:** The user "ceh2025" executed the file `tor-browser-windows-x86_64-portable-14.0.1.exe` in silent mode, initiating a background installation of the TOR Browser.
-- **Action:** Process creation detected.
-- **Command:** `tor-browser-windows-x86_64-portable-14.5.exe /S`
-- **File Path:** `C:\Users\employee\Downloads\tor-browser-windows-x86_64-portable-14.0.1.exe`
-
-### 3. Process Execution - TOR Browser Launch
-
-- **Timestamp:** `2025-04-25T17:44:26.1527056Z`
-- **Event:** User "ceh2025" opened the TOR browser. Subsequent processes associated with TOR browser, such as `firefox.exe` and `tor.exe`, were also created, indicating that the browser launched successfully.
-- **Action:** Process creation of TOR browser-related executables detected.
-- **File Path:** `C:\Users\ceh2025\Desktop\Tor Browser\Browser\TorBrowser\Tor\tor.exe`
-
-### 4. Network Connection - TOR Network
-
-- **Timestamp:** `2025-04-25T17:44:37.9992858Z`
-- **Event:** A network connection to IP `195.90.217.102` on port `443` by user "ceh2025" was established using `tor.exe`, confirming TOR browser network activity.
-- **Action:** Connection success.
-- **Process:** `tor.exe`
-- **File Path:** `c:\users\ceh2025\desktop\tor browser\browser\torbrowser\tor\tor.exe`
-
-### 5. Additional Network Connections - TOR Browser Activity
-
-- **Timestamps:**
-  - `2025-04-25T17:44:43.3142202Z` - Connected to `51.83.237.59` on port `9001`.
-  - `2025-04-25T17:44:44.3257178Z` - Local connection to `127.0.0.1` on port `9150`.
-- **Event:** Additional TOR network connections were established, indicating ongoing activity by user "ceh2025" through the TOR browser.
-- **Action:** Multiple successful connections detected.
-
-### 6. File Creation - TOR Shopping List
-
-- **Timestamp:** `2025-04-25T17:51:09.028509Z`
-- **Event:** The user "ceh2025" created a file named `TOR shopping lists.txt` on the desktop, potentially indicating a list or notes related to their TOR browser activities.
-- **Action:** File creation detected.
-- **File Path:** `C:\Users\ceh2025\Desktop\TOR shopping lists.txt`
-
 ---
 
 ## Summary
 
-The user "ceh2025" on the "ceh-tor1" device initiated and completed the installation of the TOR browser. They then proceeded to launch the browser, establish connections within the TOR network, and created various files related to TOR on their desktop, including a file named `TOR shopping lists.txt`. This sequence of activities indicates that the user actively installed, configured, and used the TOR browser, likely for anonymous browsing purposes, with possible documentation in the form of the "shopping list" file.
+Within the last 7 days, the device `windows-target-1` had incurred over 27,000 failed logon attempts. While investigation, many of these source IPs were from foreign countries and were flagged as malicious by VirustTotal. However, despite the high amounts of attempts, there is no record of a successful log in attempt. Remediation steps have been created and submitted to management for review.
 
 ---
 
-## Response Taken
 
-TOR usage was confirmed on the endpoint `ceh-tor1` by the user `ceh2025`. The device was isolated, and the user's direct manager was notified.
