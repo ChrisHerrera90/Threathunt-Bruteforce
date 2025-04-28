@@ -83,6 +83,7 @@ Next:
 - Find the location of these attempts
 - Find the services that were used
 - Find if any of them were successful in loggingin
+- Get list of IP addresss to block and services to disable AND enable account lockout policy on EDR
 
 ---
 
