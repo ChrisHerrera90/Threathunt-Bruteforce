@@ -137,22 +137,33 @@ The results show that there have been 1000 successful login attempts. Out of the
 
 ---
 
-### 3. Searched the `DeviceProcessEvents` Table for Evidence of TOR Browser Launch
+### 3. Incident Response and Remediation
 
-Searched for any evidence that the user "ceh2025" actually opened the TOR browser within their virtual machine. There was evidence that they did open it at `2025-01-08T16:17:21.6357935Z`. There were several other instances of `firefox.exe` (TOR) as well as `tor.exe` spawned afterwards.
+We have verified that there have been multiple brute force attacks from multiple malicious IPs and geographical locations. There were no successful logons from these attacks, therefore, our next goal is to develop remediation steps and forward these recommendations to the appropriate management/stakeholders so that they can be approved for implementation.
 
-**Query used to locate events:**
+There are three main remediation steps that can implement right away:
 
-```kql
-DeviceProcessEvents  
-| where DeviceName == "ceh-tor1"  
-| where FileName has_any ("tor.exe", "firefox.exe", "tor-browser.exe")  
-| project Timestamp, DeviceName, AccountName, ActionType, FileName, FolderPath, SHA256, ProcessCommandLine  
-| order by Timestamp desc
-```
-The results showed that user ceh2025 did in fact launch the TOR browser from a folder on their desktop on `2025-04-25T17:44:26.1527056Z`. There were also several other instances of firefox being launched  from the same Desktop TOR folder.
+1. Block all verified malicious IP addresses that were logged in Sentinel.
 
-![image](https://github.com/user-attachments/assets/5078cc14-0450-429c-a010-65916eaf0a33)
+2. Disable any unnecessary remote services that can increase the attack surface. These services can include:
+- SSH (22/TCP)
+- Telnet (23/TCP)
+- FTP (21/TCP)
+- NetBIOS / SMB / Samba (139/TCP & 445/TCP)
+- LDAP (389/TCP)
+- Kerberos (88/TCP)
+- RDP / Terminal Services (3389/TCP)
+- HTTP/HTTP Management Services (80/TCP & 443/TCP)
+- MSSQL (1433/TCP)
+- Oracle (1521/TCP)
+- MySQL (3306/TCP)
+- VNC (5900/TCP)
+- SNMP (161/UDP and 162/TCP/UDP)
+
+3. Enable an account lockout policy for this device after 5 failed logon attempts within the Microsoft Defender for Endpoint (EDR)
+
+
+
 
 
 ---
