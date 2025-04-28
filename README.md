@@ -1,6 +1,6 @@
 # Threat Hunt Event - Successful Brute Force Attack
 
-![image](https://github.com/user-attachments/assets/47934059-4535-44b7-af96-6a16e0426ca7)
+![image](https://github.com/user-attachments/assets/10958483-cca1-4103-a29a-f41e736d111c)
 
 
 **Threat Hunt Scenario:** Management suspects that some employees may be using TOR browsers to bypass network security controls because recent network logs show unusual encrypted traffic patterns and connections to known TOR entry nodes. Additionally, there have been anonymous reports of employees discussing ways to access restricted sites during work hours. The goal is to detect any TOR usage and analyze related security incidents to mitigate potential risks. If any use of TOR is found, notify management.
