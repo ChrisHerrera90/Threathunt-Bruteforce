@@ -58,7 +58,7 @@ DeviceProcessEvents
 
 ### 1. Searched the `SecurityEvents` Table
 
-I began my query by using the `SecurityEvent` to look for any failed logon attempts (greater than 10) in the last 7 days by searching for Event ID 4625 (Account failed to log on). In addition, I included for the results to list the account names, IP addresses/ports, failure reason, how many times the fail occured and logon types for any returned results:
+I began my query by using the `SecurityEvent` to look for any failed logon attempts (greater than 10) in the last 7 days by searching for Event ID 4625 (Account failed to log on). In addition, I included for the results to list the account names, IP addresses/ports, failure reason, how many times the event occured and logon types for any returned results:
 
 **Query used to locate events:**
 ```kql
