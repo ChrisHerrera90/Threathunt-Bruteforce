@@ -3,7 +3,7 @@
 ![image](https://github.com/user-attachments/assets/10958483-cca1-4103-a29a-f41e736d111c)
 
 
-**Threat Hunt Scenario:** Management suspects that some employees may be using TOR browsers to bypass network security controls because recent network logs show unusual encrypted traffic patterns and connections to known TOR entry nodes. Additionally, there have been anonymous reports of employees discussing ways to access restricted sites during work hours. The goal is to detect any TOR usage and analyze related security incidents to mitigate potential risks. If any use of TOR is found, notify management.
+**Threat Hunt Scenario:** Management has reported a large increase in failed login attempts across the enterprise environment. Logs have shown many virtual endpoints demonstrating this unusual behavior. The goal of this threat hunt is to investigate the existence of potential brute force attacks and to determine if there were any successful login attempts from malicious actors that need t be remediated.
 
 ## Steps taken to simulate the "bad actor" actions to Create Logs and IoCs:
 1. Create a Windows virtual machine within Azure enterprise environment.
@@ -23,7 +23,6 @@
 - EDR Platform: Microsoft Defender for Endpoint
 - Microsoft Sentinel
 - Kusto Query Language (KQL)
-- Tor Browser
 
 ##  Scenario
 
