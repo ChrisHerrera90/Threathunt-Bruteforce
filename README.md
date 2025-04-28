@@ -3,9 +3,10 @@
 ![image](https://github.com/user-attachments/assets/10958483-cca1-4103-a29a-f41e736d111c)
 
 
-**Threat Hunt Scenario:** Management has reported a large increase in failed login attempts across the enterprise environment. Logs have shown many virtual endpoints demonstrating this unusual behavior. The goal of this threat hunt is to investigate the existence of potential brute force attacks and to determine if there were any successful login attempts from malicious actors that need to be remediated.
+## 🕵🏽 Threat Hunt Scenario:
+Management has reported a large increase in failed login attempts across the enterprise environment. Logs have shown many virtual endpoints demonstrating this unusual behavior. The goal of this threat hunt is to investigate the existence of potential brute force attacks and to determine if there were any successful login attempts from malicious actors that need to be remediated.
 
-## Threat Hunt Hypothesis
+## 🤔 Threat Hunt Hypothesis
 **Hypothesis:** Adversaries are conducting brute force attacks against internet-facing Azure virtual assets in order to gain unauthorized access without triggering account lockouts.
 
 **Basis:**
@@ -26,13 +27,13 @@
 **Priority:** High — potential unauthorized access to cloud assets.
 
 
-## Platforms and Languages Leveraged
+## ⚙️ Platforms and Languages Leveraged
 - Windows 10 Virtual Machines (Microsoft Azure)
 - EDR Platform: Microsoft Defender for Endpoint
 - Microsoft Sentinel
 - Kusto Query Language (KQL)
 
-##  High-Level Overview of Steps Taken During Hunt
+## ⛰️ High-Level Overview of Steps Taken During Hunt
 Add links to each section/step of hunt!!
 - **Check `DeviceFileEvents`** for any `tor(.exe)` or `firefox(.exe)` file events.
 - **Check `DeviceProcessEvents`** for any signs of installation or usage.
@@ -54,7 +55,7 @@ DeviceProcessEvents
 
 
 
-## Steps Taken During Hunt
+## 🧩 Steps Taken During Hunt
 
 ### 1. Searched the `DeviceFileEvents` Table
 
