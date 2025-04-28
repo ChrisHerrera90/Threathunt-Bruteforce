@@ -56,20 +56,30 @@ DeviceProcessEvents
 
 ## 🧩 Steps Taken During Hunt
 
-### 1. Searched the `DeviceFileEvents` Table
+### 1. Searched the `SecurityEvents` Table
 
-I began my query by searching for any files that contained the string "tor" using the below query. The results showed that the user downloaded a TOR installer, ended up creating a TOR-related folder on their Desktop, and created a file called `TOR shopping lists.lnk` on `2025-04-25T17:44:06.1936918Z`. These TOR-related file events began on `2025-04-25T16:35:21.546641Z`.
+I began my query by using the `SecurityEvent` to look for any failed logon attempts (greater than 10) in the last 7 days by searching for Event ID 4625 (Account failed to log on). In addition, I included for the results to list the account names, IP addresses/ports, failure reason, how many times the fail occured and logon types for any returned results:
 
 **Query used to locate events:**
-
 ```kql
-DeviceFileEvents
-| where DeviceName == "ceh-tor1"
-| where FileName contains "tor"
-| order by Timestamp desc 
-| project Timestamp, DeviceName, ActionType, FileName, FolderPath, Account = InitiatingProcessAccountName
+SecurityEvent
+| where EventID == 4625
+| where TimeGenerated > ago(7d)
+| summarize FailedAttempts = count(), 
+            StartTime = min(TimeGenerated), 
+            EndTime = max(TimeGenerated)
+    by AccountName, IpAddress, Computer
+| where FailedAttempts > 10
+| project StartTime, EndTime, AccountName, IpAddress, Computer, FailedAttempts
+| order by FailedAttempts desc
 ```
-![image](https://github.com/user-attachments/assets/8daa6ff0-0828-4f9d-a429-a5a4ae47fb04)
+
+The results yielded 309 failed logon events in the past 7 days, with many of them having thousands of failed logon attempts:
+
+![image](https://github.com/user-attachments/assets/e9cf38fa-ab07-4539-9ade-fd3f1eba0472)
+
+
+
 
 ---
 
