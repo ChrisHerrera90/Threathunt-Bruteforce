@@ -87,16 +87,6 @@ Additionally I ran the top 3 IP addresses with the highest logon attempts throug
 ![image](https://github.com/user-attachments/assets/52c1c6c2-24e7-45ae-99a4-cc9fa9523220)
 
 
-
-Next:
-- Find the location of these attempts
-- Find the services that were used
-- Find if any of them were successful in logging in
-- Get list of IP addresss to block and services to disable AND enable account lockout policy on EDR
-
-
-
-
 ---
 
 ### 2. Searched the `SecurityEvents` Table for Successful Login Attempts from Malicious IPs
@@ -161,30 +151,6 @@ There are three main remediation steps that can implement right away:
 - SNMP (161/UDP and 162/TCP/UDP)
 
 3. Enable an account lockout policy for this device after 5 failed logon attempts within the Microsoft Defender for Endpoint (EDR)
-
-
-
-
-
----
-
-### 4. Searched the `DeviceNetworkEvents` Table for TOR Network Connections
-
-Next, I searched for any indication the TOR browser was used to establish a connection using any of the commonly known TOR ports using the following query:
-
-```kql
-DeviceNetworkEvents  
-| where DeviceName == "ceh-tor1"  
-| where InitiatingProcessAccountName != "system"  
-| where InitiatingProcessFileName in ("tor.exe", "firefox.exe")  
-| where RemotePort in ("9001", "9030", "9040", "9050", "9051", "9150", "80", "443")  
-| project Timestamp, DeviceName, InitiatingProcessAccountName, ActionType, RemoteIP, RemotePort, RemoteUrl, InitiatingProcessFileName, InitiatingProcessFolderPath  
-| order by Timestamp desc
-```
-
-The results showed an initial successful connection taking place on `2025-04-25T17:44:37.9992858Z` by the user on the "ceh-tor1". The VM established a connection to the remote IP address `195.90.217.102` on port `443`. The connection was initiated by the process `tor.exe`, located in the folder `c:\users\ceh2025\desktop\tor browser\browser\torbrowser\tor\tor.exe`. There were also several other connections initiated by `tor.exe` to sites over port `9150` and `9001`.
-
-![image](https://github.com/user-attachments/assets/441fad12-0669-4c6c-a889-1afb71e31914)
 
 
 ---
